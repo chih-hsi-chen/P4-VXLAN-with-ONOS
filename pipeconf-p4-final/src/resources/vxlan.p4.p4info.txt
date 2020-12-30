@@ -1,0 +1,338 @@
+pkg_info {
+  arch: "v1model"
+}
+tables {
+  preamble {
+    id: 33574068
+    name: "MyIngress.ipv4_lpm"
+    alias: "ipv4_lpm"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 16794015
+  }
+  action_refs {
+    id: 16805608
+  }
+  action_refs {
+    id: 16800567
+  }
+  direct_resource_ids: 318797497
+  size: 1024
+}
+tables {
+  preamble {
+    id: 33600258
+    name: "MyIngress.decap_table"
+    alias: "decap_table"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: LPM
+  }
+  action_refs {
+    id: 16800137
+  }
+  action_refs {
+    id: 16805608
+  }
+  action_refs {
+    id: 16800567
+  }
+  direct_resource_ids: 318789147
+  size: 1024
+}
+tables {
+  preamble {
+    id: 33616955
+    name: "MyIngress.l2_forward"
+    alias: "l2_forward"
+  }
+  match_fields {
+    id: 1
+    name: "hdr.ethernet.dstAddr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 2
+    name: "hdr.ethernet.etherType"
+    bitwidth: 16
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 16795615
+  }
+  action_refs {
+    id: 16794342
+  }
+  action_refs {
+    id: 16791698
+  }
+  action_refs {
+    id: 16805608
+  }
+  action_refs {
+    id: 16800567
+  }
+  direct_resource_ids: 318828222
+  size: 1024
+}
+tables {
+  preamble {
+    id: 33591163
+    name: "MyEgress.encap_table"
+    alias: "encap_table"
+  }
+  match_fields {
+    id: 1
+    name: "standard_metadata.egress_port"
+    bitwidth: 9
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 2
+    name: "hdr.ipv4.dstAddr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 3
+    name: "hdr.ethernet.dstAddr"
+    bitwidth: 48
+    match_type: TERNARY
+  }
+  match_fields {
+    id: 4
+    name: "hdr.arp.dstProtoAddr"
+    bitwidth: 32
+    match_type: TERNARY
+  }
+  action_refs {
+    id: 16797707
+  }
+  action_refs {
+    id: 16800567
+  }
+  direct_resource_ids: 318822787
+  size: 1024
+}
+actions {
+  preamble {
+    id: 16800567
+    name: "NoAction"
+    alias: "NoAction"
+  }
+}
+actions {
+  preamble {
+    id: 16805608
+    name: "MyIngress.drop"
+    alias: "MyIngress.drop"
+  }
+}
+actions {
+  preamble {
+    id: 16791698
+    name: "MyIngress.send_to_cpu"
+    alias: "send_to_cpu"
+  }
+}
+actions {
+  preamble {
+    id: 16794342
+    name: "MyIngress.set_out_port"
+    alias: "set_out_port"
+  }
+  params {
+    id: 1
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 16800137
+    name: "MyIngress.vxlan_decap"
+    alias: "vxlan_decap"
+  }
+}
+actions {
+  preamble {
+    id: 16795615
+    name: "MyIngress.l2_multicast"
+    alias: "l2_multicast"
+  }
+  params {
+    id: 1
+    name: "grp"
+    bitwidth: 16
+  }
+}
+actions {
+  preamble {
+    id: 16794015
+    name: "MyIngress.l3_forward"
+    alias: "l3_forward"
+  }
+  params {
+    id: 1
+    name: "dmac"
+    bitwidth: 48
+  }
+  params {
+    id: 2
+    name: "port"
+    bitwidth: 9
+  }
+}
+actions {
+  preamble {
+    id: 16816924
+    name: "MyEgress.drop"
+    alias: "MyEgress.drop"
+  }
+}
+actions {
+  preamble {
+    id: 16797707
+    name: "MyEgress.vxlan_encap"
+    alias: "vxlan_encap"
+  }
+  params {
+    id: 1
+    name: "vni"
+    bitwidth: 24
+  }
+  params {
+    id: 2
+    name: "smac"
+    bitwidth: 48
+  }
+  params {
+    id: 3
+    name: "dmac"
+    bitwidth: 48
+  }
+  params {
+    id: 4
+    name: "srcIP"
+    bitwidth: 32
+  }
+  params {
+    id: 5
+    name: "dstIP"
+    bitwidth: 32
+  }
+}
+counters {
+  preamble {
+    id: 302045640
+    name: "tx_port_counter"
+    alias: "tx_port_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  size: 255
+}
+counters {
+  preamble {
+    id: 302023953
+    name: "rx_port_counter"
+    alias: "rx_port_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  size: 255
+}
+direct_counters {
+  preamble {
+    id: 318797497
+    name: "MyIngress.l3_fwd_counter"
+    alias: "l3_fwd_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  direct_table_id: 33574068
+}
+direct_counters {
+  preamble {
+    id: 318789147
+    name: "MyIngress.vxlan_decap_counter"
+    alias: "vxlan_decap_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  direct_table_id: 33600258
+}
+direct_counters {
+  preamble {
+    id: 318828222
+    name: "MyIngress.l2_fwd_counter"
+    alias: "l2_fwd_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  direct_table_id: 33616955
+}
+direct_counters {
+  preamble {
+    id: 318822787
+    name: "MyEgress.vxlan_encap_counter"
+    alias: "vxlan_encap_counter"
+  }
+  spec {
+    unit: BOTH
+  }
+  direct_table_id: 33591163
+}
+controller_packet_metadata {
+  preamble {
+    id: 67146229
+    name: "packet_in"
+    alias: "packet_in"
+    annotations: "@controller_header(\"packet_in\")"
+  }
+  metadata {
+    id: 1
+    name: "ingress_port"
+    bitwidth: 9
+  }
+  metadata {
+    id: 2
+    name: "_padding"
+    bitwidth: 7
+  }
+}
+controller_packet_metadata {
+  preamble {
+    id: 67121543
+    name: "packet_out"
+    alias: "packet_out"
+    annotations: "@controller_header(\"packet_out\")"
+  }
+  metadata {
+    id: 1
+    name: "egress_port"
+    bitwidth: 9
+  }
+  metadata {
+    id: 2
+    name: "_padding"
+    bitwidth: 7
+  }
+}
+type_info {
+}
